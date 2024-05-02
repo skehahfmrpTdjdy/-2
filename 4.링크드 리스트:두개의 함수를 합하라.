@@ -1,0 +1,75 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    int data;
+    struct Node* next;
+} Node;
+
+Node* add_to_list(Node* head, int data) {
+    Node* new_node = (Node*)malloc(sizeof(Node));
+    if (!new_node) {
+        printf("Memory allocation failed.\n");
+        return NULL;
+    }
+    new_node->data = data;
+    new_node->next = head;
+    head = new_node;
+    return head;
+}
+
+void print_list(Node* head) {
+    Node* current = head;
+    while (current != NULL) {
+        printf("%d", current->data);
+        if (current->next != NULL) {
+            printf("->");
+        }
+        current = current->next;
+    }
+    printf("->NULL\n");
+}
+Node* merge_lists(Node* first, Node* second) {
+    if (!second) return first;  // If the second list is empty, return the first list
+    Node* current = second;
+    while (current->next != NULL) {  // Traverse to the end of the second list
+        current = current->next;
+    }
+    current->next = first;  // Connect the end of the second list to the first list
+    return second;
+}
+int main() {
+    // 첫 번째 리스트 생성
+    Node* firstList = NULL;
+    firstList = add_to_list(firstList, 10);
+    firstList = add_to_list(firstList, 20);
+    firstList = add_to_list(firstList, 30);
+
+    // 두 번째 리스트 생성
+    Node* secondList = NULL;
+    secondList = add_to_list(secondList, 40);
+    secondList = add_to_list(secondList, 50);
+
+    // 각 리스트 출력
+   
+    print_list(firstList);
+    
+    print_list(secondList);
+
+    // 리스트 병합
+    Node* mergedList = merge_lists(firstList, secondList);
+
+    // 병합된 리스트 출력
+   
+    print_list(mergedList);
+
+    // 메모리 해제
+    while (mergedList != NULL) {
+        Node* temp = mergedList;
+        mergedList = mergedList->next;
+        free(temp);
+    }
+
+    return 0;
+}

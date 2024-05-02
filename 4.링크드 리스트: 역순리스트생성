@@ -1,0 +1,84 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    int data;
+    struct Node* next;
+} Node;
+
+// 리스트의 시작부에 새로운 노드를 추가하는 함수
+Node* add_to_list(Node* head, int data) {
+    Node* new_node = (Node*)malloc(sizeof(Node));
+    if (!new_node) {
+        printf("Memory allocation failed.\n");
+        return NULL;
+    }
+    new_node->data = data;
+    new_node->next = head;
+    head = new_node;
+    return head;
+}
+
+// 리스트를 출력하는 함수
+void print_list(Node* head) {
+    Node* current = head;
+    while (current != NULL) {
+        printf("%d", current->data);
+        if (current->next != NULL) {
+            printf("->");
+        }
+        current = current->next;
+    }
+    printf("->NULL\n");
+}
+Node* reverse_list(Node* head) {
+    Node* reversed = NULL;
+    Node* current = head;
+    while (current != NULL) {
+        Node* new_node = (Node*)malloc(sizeof(Node));
+        if (!new_node) {
+            printf("Memory allocation failed.\n");
+            // 메모리 할당 실패 시, 지금까지 만든 역순 리스트 해제
+            while (reversed != NULL) {
+                Node* temp = reversed;
+                reversed = reversed->next;
+                free(temp);
+            }
+            return NULL;
+        }
+        new_node->data = current->data;
+        new_node->next = reversed;
+        reversed = new_node;
+        current = current->next;
+    }
+    return reversed;
+}
+int main() {
+    Node* head = NULL;
+    head = add_to_list(head, 10);
+    head = add_to_list(head, 20);
+    head = add_to_list(head, 30);
+
+    // 원본 리스트 출력
+   
+    print_list(head);
+
+    // 역순 리스트 생성 및 출력
+    Node* reversedHead = reverse_list(head);
+  
+    print_list(reversedHead);
+
+    // 메모리 해제
+    while (head != NULL) {
+        Node* temp = head;
+        head = head->next;
+        free(temp);
+    }
+    while (reversedHead != NULL) {
+        Node* temp = reversedHead;
+        reversedHead = reversedHead->next;
+        free(temp);
+    }
+
+    return 0;
+}

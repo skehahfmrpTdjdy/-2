@@ -1,0 +1,65 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    int data;
+    struct Node* next;
+} Node;
+
+// 리스트의 시작부에 새로운 노드를 추가하는 함수
+Node* add_to_list(Node* head, int data) {
+    Node* new_node = (Node*)malloc(sizeof(Node));
+    if (!new_node) {
+        printf("Memory allocation failed.\n");
+        return NULL;
+    }
+    new_node->data = data;
+    new_node->next = head;
+    head = new_node;
+    return head;
+}
+
+// 리스트를 출력하는 함수
+void print_list(Node* head) {
+    Node* current = head;
+    while (current != NULL) {
+        printf("%d", current->data);
+        if (current->next != NULL) {
+            printf("->");
+        }
+        current = current->next;
+    }
+    printf("->NULL\n");
+}
+void search_value(Node* head, int value) {
+    Node* current = head;
+    while (current != NULL) {
+        if (current->data == value) {
+            printf("리스트에서 %d을(를) 찾았습니다.\n", value);
+            return;
+        }
+        current = current->next;
+    }
+    printf("리스트에서 %d을(를) 찾지 못했습니다.\n", value);
+}
+int main() {
+    Node* head = NULL;
+    head = add_to_list(head, 10);
+    head = add_to_list(head, 20);
+    head = add_to_list(head, 30);
+
+    // 리스트 출력
+    print_list(head);
+
+    // 특정 값 30을 탐색
+    search_value(head, 30);
+
+    // 메모리 해제
+    while (head != NULL) {
+        Node* temp = head;
+        head = head->next;
+        free(temp);
+    }
+
+    return 0;
+}

@@ -1,0 +1,74 @@
+
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// 노드 구조체 정의
+struct Node {
+    string data; // 문자열 데이터를 저장
+    Node* next; // 다음 노드를 가리키는 포인터
+
+    Node(string data) : data(data), next(nullptr) {}
+};
+
+// 링크드 리스트 클래스 정의
+class LinkedList {
+private:
+    Node* head; // 링크드 리스트의 첫 번째 노드를 가리키는 포인터
+
+public:
+    // 생성자
+    LinkedList() : head(nullptr) {}
+
+    // 소멸자
+    ~LinkedList() {
+        clear();
+    }
+
+    // 모든 노드를 삭제하는 함수
+    void clear() {
+        Node* current = head;
+        while (current != nullptr) {
+            Node* next = current->next;
+            delete current;
+            current = next;
+        }
+        head = nullptr;
+    }
+
+    // 링크드 리스트의 앞에 새로운 노드를 추가하는 함수
+    void push_front(string data) {
+        Node* newNode = new Node(data); // 새 노드 생성
+        newNode->next = head; // 새 노드의 다음 노드를 현재 헤드로 설정
+        head = newNode; // 헤드를 새 노드로 업데이트
+    }
+
+    // 링크드 리스트의 모든 요소를 출력하는 함수
+    void print() const {
+        Node* current = head;
+        while (current != nullptr) {
+            cout << current->data;
+            if (current->next != nullptr) cout << "->";
+            current = current->next;
+        }
+        cout << "NULL" << endl;
+    }
+};
+
+int main() {
+    LinkedList myList;
+
+    // 요소를 추가하고 링크드 리스트를 출력
+    myList.push_front("APPLE");
+    myList.print(); // APPLE->NULL
+
+    myList.push_front("KIWI");
+    myList.print(); // KIWI->APPLE->NULL
+
+    myList.push_front("BANANA");
+    myList.print(); // BANANA->KIWI->APPLE->NULL
+
+    return 0;
+}
